@@ -17,14 +17,12 @@ const Home = ({ home, provider, account, escrow, togglePop }) => {
     const [owner, setOwner] = useState(null)
 
     const fetchDetails = async () => {
-
         const buyer = await escrow.buyer(home.id)
         setBuyer(buyer)
 
         const hasBought = await escrow.approval(home.id, buyer)
         setHasBought(hasBought)
-
-
+        
         const seller = await escrow.seller()
         setSeller(seller)
 
@@ -36,7 +34,6 @@ const Home = ({ home, provider, account, escrow, togglePop }) => {
 
         const hasLended = await escrow.approval(home.id, lender)
         setHasLended(hasLended)
-
 
         const inspector = await escrow.inspector()
         setInspector(inspector)
@@ -56,20 +53,19 @@ const Home = ({ home, provider, account, escrow, togglePop }) => {
         const escrowAmount = await escrow.escrowAmount(home.id)
         const signer = await provider.getSigner()
 
-        let tx = await escrow.connect(signer).depositEarnest(home.id, { value: escrowAmount })
-        await tx.wait()
+        let transaction = await escrow.connect(signer).depositEarnest(home.id, { value: escrowAmount })
+        await transaction.wait()
 
-        tx = await escrow.connect(signer).approveSale(home.id)
-        await tx.wait()
+        transaction = await escrow.connect(signer).approveSale(home.id)
+        await transaction.wait()
 
         setHasBought(true)
     }
 
     const inspectHandler = async () => {
         const signer = await provider.getSigner()
-
-        const tx = await escrow.connect(signer).updateInspectionStatus(home.id, true)
-        await tx.wait()
+        const transaction = await escrow.connect(signer).updateInspectionStatus(home.id, true)
+        await transaction.wait()
 
         setHasInspected(true)
     }
@@ -77,8 +73,8 @@ const Home = ({ home, provider, account, escrow, togglePop }) => {
     const lendHandler = async () => {
         const signer = await provider.getSigner()
 
-        const tx = await escrow.connect(signer).approveSale(home.id)
-        await tx.wait()
+        const transaction = await escrow.connect(signer).approveSale(home.id)
+        await transaction.wait()
 
         const lendAmount = (await escrow.purchasePrice(home.id) - await escrow.escrowAmount(home.id))
         await signer.sendTransaction({ to: escrow.address, value: lendAmount.toString(), gasLimit: 60000 })
@@ -89,11 +85,11 @@ const Home = ({ home, provider, account, escrow, togglePop }) => {
     const sellHandler = async () => {
         const signer = await provider.getSigner()
 
-        let tx = await escrow.connect(signer).approveSale(home.id)
-        await tx.wait()
+        let transaction = await escrow.connect(signer).approveSale(home.id)
+        await transaction.wait()
 
-        tx = await escrow.connect(signer).finalizeSale(home.id)
-        await tx.wait()
+        transaction = await escrow.connect(signer).finalizeSale(home.id)
+        await transaction.wait()
 
         setHasSold(true)
     }
@@ -145,7 +141,7 @@ const Home = ({ home, provider, account, escrow, togglePop }) => {
                             )}
 
                             <button className='home__contact'>
-                                Contact Agent
+                                Contact agent
                             </button>
                         </div>
                     )}
@@ -160,7 +156,7 @@ const Home = ({ home, provider, account, escrow, togglePop }) => {
 
                     <hr />
 
-                    <h2>Facts and Features</h2>
+                    <h2>Facts and features</h2>
 
                     <ul>
                         {home.attributes.map((attribute, index) => (
@@ -168,8 +164,7 @@ const Home = ({ home, provider, account, escrow, togglePop }) => {
                         ))}
                     </ul>
                 </div>
-
-
+                        
                 <button onClick={togglePop} className="home__close">
                     <img src={close} alt="Close" />
                 </button>
