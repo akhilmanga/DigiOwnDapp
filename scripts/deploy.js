@@ -21,8 +21,8 @@ async function main() {
   console.log(`Minting 3 properties...\n`)
 
   for (let i = 0; i < 3; i++) {
-    const transaction = await realEstate.connect(seller).mint(`https://ipfs.io/ipfs/QmQVcpsjrA6cr1iJjZAodYwmPekYgbnXGo4DFubJiLc2EB/${i + 1}.json`)
-    await transaction.wait()
+    const tx = await realEstate.connect(seller).mint(`https://ipfs.io/ipfs/QmQVcpsjrA6cr1iJjZAodYwmPekYgbnXGo4DFubJiLc2EB/${i + 1}.json`)
+    await tx.wait()
   }
 
   const Escrow = await ethers.getContractFactory('Escrow')
@@ -38,18 +38,18 @@ async function main() {
   console.log(`Listing 3 properties...\n`)
 
   for (let i = 0; i < 3; i++) {
-    let transaction = await realEstate.connect(seller).approve(escrow.address, i + 1)
-    await transaction.wait()
+    let tx = await realEstate.connect(seller).approve(escrow.address, i + 1)
+    await tx.wait()
   }
 
-  transaction = await escrow.connect(seller).list(1, buyer.address, tokens(20), tokens(10))
-  await transaction.wait()
+  tx = await escrow.connect(seller).list(1, buyer.address, tokens(20), tokens(10))
+  await tx.wait()
 
   transaction = await escrow.connect(seller).list(2, buyer.address, tokens(15), tokens(5))
-  await transaction.wait()
+  await tx.wait()
 
-  transaction = await escrow.connect(seller).list(3, buyer.address, tokens(10), tokens(5))
-  await transaction.wait()
+  tx = await escrow.connect(seller).list(3, buyer.address, tokens(10), tokens(5))
+  await tx.wait()
 
   console.log(`Finished.`)
 }
