@@ -7,15 +7,12 @@ import Home from './components/Home';
 
 import RealEstate from './abis/RealEstate.json'
 import Escrow from './abis/Escrow.json'
-
 import config from './config.json';
 
 function App() {
   const [provider, setProvider] = useState(null)
   const [escrow, setEscrow] = useState(null)
-
   const [account, setAccount] = useState(null)
-
   const [homes, setHomes] = useState([])
   const [home, setHome] = useState({})
   const [toggle, setToggle] = useState(false);
